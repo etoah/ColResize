@@ -32,7 +32,7 @@
 
     function mousedownListener(event)
     {
-        if (Math.abs(event.offsetX - this.offsetWidth)<RESIZE_OFFSET)
+        if (this.offsetWidth-event.offsetX<RESIZE_OFFSET)
         {
             this.IsMouseDown = true;
             this.clickX=event.x;
@@ -52,7 +52,7 @@
        // alert("adfasdf");
         var j,table;
         //更改鼠标样式
-        if (Math.abs(event.offsetX - this.offsetWidth)<RESIZE_OFFSET)
+        if (this.offsetWidth-event.offsetX<RESIZE_OFFSET)
             this.style.cursor = 'col-resize';
         else
             this.style.cursor = 'default';
@@ -64,15 +64,6 @@
            //调整列宽
            this.style.width = this.width;
            this.style.cursor = 'col-resize';
-            //调整该列中的每个Cell
-            table = this.parentElement.parentElement;
-            while (table.tagName != 'TABLE')//兼容tbody
-            {
-                table = table.parentElement;
-            }
-            for (j = 0; j < table.rows.length; j++) {
-                table.rows[j].cells[this.cellIndex].width = this.width;
-            }
 
         }
     }
