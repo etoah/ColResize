@@ -6,7 +6,7 @@
 
 
     var IGNORE_TABLE_ATRR="data-col-resize";
-    var RESIZE_OFFSET=10;
+    var RESIZE_OFFSET=8;
 
     function addEvent(element,event,callback)
     {
@@ -132,7 +132,7 @@
             currentCell=null;
         for(;i<tables.length;i++)
         {
-            if(tables[i].getAttribute(IGNORE_TABLE_ATRR)=="false") {
+            if(tables[i].getAttribute(IGNORE_TABLE_ATRR)==="false") {
             continue;
             }
             settTableStyle(tables[i]);
