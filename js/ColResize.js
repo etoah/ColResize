@@ -39,7 +39,7 @@
 
     function IsTableHeader(ele)
     {
-        return (ele.nodeName==="TD"||ele.nodeName==="TH")
+        return ele&&(ele.nodeName==="TD"||ele.nodeName==="TH")
     }
 
     function mousedownListener(event)
@@ -82,9 +82,14 @@
         }
     }
 
+    function settTableStyle(table)
+    {
+        table.style.borderCollapse="collapse";
+    }
+
     function mousemoveListener(event)
     {
-        console.log(event.offsetX);
+
 
         var previous=getPerviousElement(this);
         if ((this.offsetWidth-event.offsetX<RESIZE_OFFSET)||(event.offsetX<RESIZE_OFFSET)&&IsTableHeader(previous))//this or next col
@@ -98,7 +103,7 @@
         //this col
         if(this.IsMouseDown&&(this.oldWidth + (event.x - this.clickX))> 0)
         {
-
+            console.log(event.offsetX);
            this.width = this.oldWidth + (event.x - this.clickX);
            //rersize width
            this.style.width = this.width;
@@ -110,7 +115,7 @@
         var previous=getPerviousElement(this);
         if(IsTableHeader(previous)&&previous.IsMouseDown&&(previous.oldWidth + (event.x - previous.clickX))> 0)
         {
-
+            console.log(event.offsetX);
             previous.width = previous.oldWidth + (event.x - previous.clickX);
             //rersize width
             previous.style.width = previous.width;
@@ -127,9 +132,10 @@
             currentCell=null;
         for(;i<tables.length;i++)
         {
-            if(tables[i].getAttribute(IGNORE_TABLE_ATRR)==false) {
+            if(tables[i].getAttribute(IGNORE_TABLE_ATRR)=="false") {
             continue;
             }
+            settTableStyle(tables[i]);
             for(j=0;j<tables[i].rows[0].cells.length;j++)
             {
                 currentCell=tables[i].rows[0].cells[j];
