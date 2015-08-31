@@ -101,7 +101,7 @@
         var previous=getPerviousElement(this);
         if(IsTableHeader(previous)&&previous.IsMouseDown&&(previous.oldWidth + (event.x - previous.clickX))> 0)
         {
-            console.log(event.offsetX);
+           // console.log(event.offsetX);
             previous.width = previous.oldWidth + (event.x - previous.clickX);
             //rersize width
             previous.style.width = previous.width;
