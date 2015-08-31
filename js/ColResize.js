@@ -1,12 +1,12 @@
 /**
  * Created by Lucien on 8/30/2015.
  */
-"use strict";
+
 (function(window,document){
 
-
+    "use strict";
     var IGNORE_TABLE_ATRR="data-col-resize";
-    var RESIZE_OFFSET=8;
+    var RESIZE_OFFSET=12;
 
     function addEvent(element,event,callback)
     {
@@ -67,19 +67,6 @@
     {
 
         this.style.cursor = 'default';
-
-        //next col
-        var previous=getPerviousElement(this);
-        if(event.offsetX<RESIZE_OFFSET&&IsTableHeader(previous))
-        {
-
-            previous.IsMouseDown = false;
-
-        }
-        else
-        {
-            this.IsMouseDown = false;
-        }
     }
 
     function settTableStyle(table)
@@ -103,7 +90,6 @@
         //this col
         if(this.IsMouseDown&&(this.oldWidth + (event.x - this.clickX))> 0)
         {
-            console.log(event.offsetX);
            this.width = this.oldWidth + (event.x - this.clickX);
            //rersize width
            this.style.width = this.width;
@@ -124,6 +110,17 @@
         }
     }
 
+
+    //To prevent drag too fast or drag into the table, cancel all header drag
+    function mouseupOnTableListener(event)
+    {
+        var j=0;
+        for(;j<this.rows[0].cells.length;j++)
+        {
+            this.rows[0].cells[j].IsMouseDown&&(this.rows[0].cells[j].IsMouseDown=false);
+        }
+    }
+
     function addColResizeEvent()
     {
         var tables=getTableArray(),
@@ -136,6 +133,7 @@
             continue;
             }
             settTableStyle(tables[i]);
+            addEvent(tables[i],"mouseup",mouseupOnTableListener);
             for(j=0;j<tables[i].rows[0].cells.length;j++)
             {
                 currentCell=tables[i].rows[0].cells[j];
