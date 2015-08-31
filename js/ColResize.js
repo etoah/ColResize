@@ -6,7 +6,7 @@
 
 
     var IGNORE_TABLE_ATRR="data-col-resize";
-    var RESIZE_OFFSET=12;
+    var RESIZE_OFFSET=10;
 
     function addEvent(element,event,callback)
     {
@@ -25,9 +25,21 @@
         }
     }
 
+    function getPerviousElement(ele)
+    {
+        var previous=ele.previousSibling;
+        while ( previous && previous.nodeType !== 1 ){ previous=previous.previousSibling; }
+        return previous;
+    }
+
     function getTableArray()
     {
         return document.getElementsByTagName("table");
+    }
+
+    function IsTableHeader(ele)
+    {
+        return (ele.nodeName==="TD"||ele.nodeName==="TH")
     }
 
     function mousedownListener(event)
@@ -39,31 +51,70 @@
             this.oldWidth = this.offsetWidth;
         }
 
+        //next col
+        var previous=getPerviousElement(this);
+        if(event.offsetX<RESIZE_OFFSET&&IsTableHeader(previous))
+        {
+
+            previous.IsMouseDown = true;
+            previous.clickX=event.x;
+            previous.oldWidth = previous.offsetWidth;
+        }
+
     }
 
     function mouseupListener(event)
     {
-        this.IsMouseDown = false;
+
         this.style.cursor = 'default';
+
+        //next col
+        var previous=getPerviousElement(this);
+        if(event.offsetX<RESIZE_OFFSET&&IsTableHeader(previous))
+        {
+
+            previous.IsMouseDown = false;
+
+        }
+        else
+        {
+            this.IsMouseDown = false;
+        }
     }
 
     function mousemoveListener(event)
     {
-       // alert("adfasdf");
-        var j,table;
-        //更改鼠标样式
-        if (this.offsetWidth-event.offsetX<RESIZE_OFFSET)
+        console.log(event.offsetX);
+
+        var previous=getPerviousElement(this);
+        if ((this.offsetWidth-event.offsetX<RESIZE_OFFSET)||(event.offsetX<RESIZE_OFFSET)&&IsTableHeader(previous))//this or next col
             this.style.cursor = 'col-resize';
         else
             this.style.cursor = 'default';
 
+
+
+
+        //this col
         if(this.IsMouseDown&&(this.oldWidth + (event.x - this.clickX))> 0)
         {
 
            this.width = this.oldWidth + (event.x - this.clickX);
-           //调整列宽
+           //rersize width
            this.style.width = this.width;
            this.style.cursor = 'col-resize';
+
+        }
+
+        //next
+        var previous=getPerviousElement(this);
+        if(IsTableHeader(previous)&&previous.IsMouseDown&&(previous.oldWidth + (event.x - previous.clickX))> 0)
+        {
+
+            previous.width = previous.oldWidth + (event.x - previous.clickX);
+            //rersize width
+            previous.style.width = previous.width;
+            this.style.cursor = 'col-resize';
 
         }
     }
