@@ -6,8 +6,7 @@
 
     "use strict";
     var IGNORE_TABLE_ATRR="data-col-resize";
-    var RESIZE_OFFSET=12;
-
+    var RESIZE_OFFSET=10;
     function addEvent(element,event,callback)
     {
         if(element.addEventListener) //DOM 2
@@ -17,7 +16,7 @@
         }
         else if(element.attachEvent)//less than IE9
         {
-            element.addEventListener('on'+event,callback);
+            element.attachEvent('on'+event,callback);
         }
         else//dom 0
         {
@@ -42,18 +41,25 @@
         return ele&&(ele.nodeName==="TD"||ele.nodeName==="TH")
     }
 
+
     function mousedownListener(event)
     {
-        if (this.offsetWidth-event.offsetX<RESIZE_OFFSET)
+        var sender=this;
+        if(this===window)//less than ie8
         {
-            this.IsMouseDown = true;
-            this.clickX=event.x;
-            this.oldWidth = this.offsetWidth;
+            sender=event.srcElement;
+        }
+
+        if (sender.offsetWidth-event.offsetX<=RESIZE_OFFSET)
+        {
+            sender.IsMouseDown = true;
+            sender.clickX=event.x;
+            sender.oldWidth = sender.offsetWidth;
         }
 
         //next col
-        var previous=getPerviousElement(this);
-        if(event.offsetX<RESIZE_OFFSET&&IsTableHeader(previous))
+        var previous=getPerviousElement(sender);
+        if(event.offsetX<=RESIZE_OFFSET&&IsTableHeader(previous))
         {
 
             previous.IsMouseDown = true;
@@ -65,11 +71,27 @@
 
     function mouseupListener(event)
     {
+        var sender=this;
+        if(this===window)//less than ie8
+        {
+            sender=event.srcElement;
+        }
+        sender.style.cursor = 'default';
+        if (sender.offsetWidth-event.offsetX<=sender.offsetWidth/2)
+        {
+            sender.IsMouseDown = false;
+        }
 
-        this.style.cursor = 'default';
+        //next col
+        var previous=getPerviousElement(sender);
+        if(event.offsetX<=sender.offsetWidth/2&&IsTableHeader(previous))
+        {
+
+            previous.IsMouseDown = false;
+        }
     }
 
-    function settTableStyle(table)
+    function setTableStyle(table)
     {
         table.style.borderCollapse="collapse";
     }
@@ -77,48 +99,67 @@
     function mousemoveListener(event)
     {
 
+        var sender=this;
+        if(this===window)//less than ie8
+        {
+            sender=event.srcElement;
+        }
 
-        var previous=getPerviousElement(this);
-        if ((this.offsetWidth-event.offsetX<RESIZE_OFFSET)||(event.offsetX<RESIZE_OFFSET)&&IsTableHeader(previous))//this or next col
-            this.style.cursor = 'col-resize';
+        var previous=getPerviousElement(sender);
+        if ((sender.offsetWidth-event.offsetX<=RESIZE_OFFSET)||(event.offsetX<=RESIZE_OFFSET)&&IsTableHeader(previous))//this or next col
+            sender.style.cursor = 'col-resize';
         else
-            this.style.cursor = 'default';
+            sender.style.cursor = 'default';
 
 
 
 
         //this col
-        if(this.IsMouseDown&&(this.oldWidth + (event.x - this.clickX))> 0)
+        if(sender.IsMouseDown&&(sender.oldWidth + (event.x - sender.clickX))> 0)
         {
-           this.width = this.oldWidth + (event.x - this.clickX);
+            sender.width = sender.oldWidth + (event.x - sender.clickX);
            //rersize width
-           this.style.width = this.width;
-           this.style.cursor = 'col-resize';
+            sender.style.width = sender.width;
+            sender.style.cursor = 'col-resize';
 
         }
 
         //next
-        var previous=getPerviousElement(this);
+        var previous=getPerviousElement(sender);
         if(IsTableHeader(previous)&&previous.IsMouseDown&&(previous.oldWidth + (event.x - previous.clickX))> 0)
         {
            // console.log(event.offsetX);
             previous.width = previous.oldWidth + (event.x - previous.clickX);
             //rersize width
             previous.style.width = previous.width;
-            this.style.cursor = 'col-resize';
+            sender.style.cursor = 'col-resize';
 
         }
     }
 
 
-    //To prevent drag too fast or drag into the table, cancel all header drag
+
     function mouseupOnTableListener(event)
     {
-        var j=0;
-        for(;j<this.rows[0].cells.length;j++)
+        var sender=this,
+            j=0;
+        if(this===window)//less than ie8
         {
-            this.rows[0].cells[j].IsMouseDown&&(this.rows[0].cells[j].IsMouseDown=false);
+            sender=event.srcElement;
         }
+
+        if(sender.nodeName==="TABLE")//To prevent drag too fast or drag into the table, cancel all header drag
+        {
+            for(;j<sender.rows[0].cells.length;j++)
+            {
+                sender.rows[0].cells[j].IsMouseDown&&(sender.rows[0].cells[j].IsMouseDown=false);
+            }
+
+
+        }
+
+
+
     }
 
     function addColResizeEvent()
@@ -132,7 +173,7 @@
             if(tables[i].getAttribute(IGNORE_TABLE_ATRR)==="false") {
             continue;
             }
-            settTableStyle(tables[i]);
+            setTableStyle(tables[i]);
             addEvent(tables[i],"mouseup",mouseupOnTableListener);
             for(j=0;j<tables[i].rows[0].cells.length;j++)
             {
