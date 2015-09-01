@@ -19,3 +19,9 @@
 	<table data-col-resize="false">
 	
 ```
+
+
+###兼容性
+
+* 所有现代浏览器（Chrome,Oprea）
+* IE6+

@@ -31,28 +31,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="case.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="case.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/case.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.75">
-              <caret line="112" column="0" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.3794643">
+              <caret line="20" column="26" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ColResize.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ColResize.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/ColResize.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33296213">
-              <caret line="103" column="13" selection-start-line="103" selection-start-column="13" selection-end-line="103" selection-end-column="13" />
+            <state vertical-scroll-proportion="-9.153846">
+              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
               <folding>
-                <element signature="e#213#553#0" expanded="false" />
-                <element signature="e#596#762#0" expanded="false" />
-                <element signature="e#797#859#0" expanded="false" />
-                <element signature="e#897#967#0" expanded="false" />
-                <element signature="e#1011#1498#0" expanded="false" />
-                <element signature="e#1628#1682#0" expanded="false" />
+                <element signature="e#212#547#0" expanded="false" />
+                <element signature="e#590#756#0" expanded="false" />
+                <element signature="e#791#853#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -272,7 +269,15 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/js/ColResize.js</url>
+          <line>94</line>
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -297,12 +302,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#213#553#0" expanded="false" />
-            <element signature="e#596#762#0" expanded="false" />
-            <element signature="e#797#859#0" expanded="false" />
-            <element signature="e#897#967#0" expanded="false" />
-            <element signature="e#1011#1498#0" expanded="false" />
-            <element signature="e#1628#1682#0" expanded="false" />
+            <element signature="e#212#547#0" expanded="false" />
+            <element signature="e#590#756#0" expanded="false" />
+            <element signature="e#791#853#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -315,26 +317,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/case.html">
+    <entry file="file://$PROJECT_DIR$/js/ColResize.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.75">
-          <caret line="112" column="0" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="-9.153846">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding>
+            <element signature="e#212#547#0" expanded="false" />
+            <element signature="e#590#756#0" expanded="false" />
+            <element signature="e#791#853#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/ColResize.js">
+    <entry file="file://$PROJECT_DIR$/case.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33296213">
-          <caret line="103" column="13" selection-start-line="103" selection-start-column="13" selection-end-line="103" selection-end-column="13" />
-          <folding>
-            <element signature="e#213#553#0" expanded="false" />
-            <element signature="e#596#762#0" expanded="false" />
-            <element signature="e#797#859#0" expanded="false" />
-            <element signature="e#897#967#0" expanded="false" />
-            <element signature="e#1011#1498#0" expanded="false" />
-            <element signature="e#1628#1682#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="0.3794643">
+          <caret line="20" column="26" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
+          <folding />
         </state>
       </provider>
     </entry>
