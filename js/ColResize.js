@@ -7,6 +7,32 @@
     "use strict";
     var IGNORE_TABLE_ATRR="data-col-resize";
     var RESIZE_OFFSET=10;
+
+    var RUN_DELAY=15;
+    var MUST_RUN_DELAY=30;
+
+
+    var throttle = function(fn, delay, mustRunDelay){
+        var timer = null;
+        var t_start;
+        return function(){
+            var context = this, args = arguments, t_curr = +new Date();
+            clearTimeout(timer);
+            if(!t_start){
+                t_start = t_curr;
+            }
+            if(t_curr - t_start >= mustRunDelay){  //当超过了必须执时的时间，
+                fn.apply(context, args);
+                t_start = t_curr;
+            }
+            else {
+                timer = setTimeout(function(){
+                    fn.apply(context, args);
+                }, delay);
+            }
+        };
+    };
+
     function addEvent(element,event,callback)
     {
         if(element.addEventListener) //DOM 2
@@ -44,6 +70,7 @@
 
     function mousedownListener(event)
     {
+
         var sender=this,
             previous=getPerviousElement(sender);
         event.x||(event.x=event.pageX);//Firefox
@@ -70,7 +97,9 @@
 
     function mouseupListener(event)
     {
-        var sender=this;
+
+        var sender=this,
+            previous=getPerviousElement(sender);
         if(this===window)//less than ie8
         {
             sender=event.srcElement;
@@ -80,10 +109,7 @@
         {
             sender.IsMouseDown = false;
         }
-
-        //next col
-        var previous=getPerviousElement(sender);
-        if(event.offsetX<=sender.offsetWidth/2&&IsTableHeader(previous))
+        else if(event.offsetX<=sender.offsetWidth/2&&IsTableHeader(previous))//next col
         {
 
             previous.IsMouseDown = false;
@@ -97,15 +123,14 @@
 
     function mousemoveListener(event)
     {
-
-        var sender=this,previous=getPerviousElement(sender);
+        var sender=this,
+            previous=getPerviousElement(sender);
         event.x||(event.x=event.pageX);//Firefox
         if(this===window)//less than ie9
         {
             sender=event.srcElement;
         }
 
-        var previous=getPerviousElement(sender);
         if ((sender.offsetWidth-event.offsetX<=RESIZE_OFFSET)||(event.offsetX<=RESIZE_OFFSET)&&IsTableHeader(previous))//this or next col
             sender.style.cursor = 'col-resize';
         else
@@ -136,7 +161,7 @@
     {
         var sender=this,
             j=0;
-        if(this===window)//less than ie8
+        if(this===window)//less than ie9
         {
             sender=event.srcElement;
         }
@@ -171,7 +196,8 @@
             for(j=0;j<tables[i].rows[0].cells.length;j++)
             {
                 currentCell=tables[i].rows[0].cells[j];
-                addEvent(currentCell,"mousemove",mousemoveListener);
+                addEvent(currentCell,"mousemove",throttle(mousemoveListener,RUN_DELAY,MUST_RUN_DELAY));
+                //addEvent(currentCell,"mousemove",mousemoveListener);
                 addEvent(currentCell,"mousedown",mousedownListener);
                 addEvent(currentCell,"mouseup",mouseupListener);
 
