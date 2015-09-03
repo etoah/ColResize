@@ -44,7 +44,9 @@
 
     function mousedownListener(event)
     {
-        var sender=this;
+        var sender=this,
+            previous=getPerviousElement(sender);
+        event.x||(event.x=event.pageX);//Firefox
         if(this===window)//less than ie8
         {
             sender=event.srcElement;
@@ -56,10 +58,7 @@
             sender.clickX=event.x;
             sender.oldWidth = sender.offsetWidth;
         }
-
-        //next col
-        var previous=getPerviousElement(sender);
-        if(event.offsetX<=RESIZE_OFFSET&&IsTableHeader(previous))
+        else if(event.offsetX<=RESIZE_OFFSET&&IsTableHeader(previous))//next col
         {
 
             previous.IsMouseDown = true;
@@ -99,8 +98,9 @@
     function mousemoveListener(event)
     {
 
-        var sender=this;
-        if(this===window)//less than ie8
+        var sender=this,previous=getPerviousElement(sender);
+        event.x||(event.x=event.pageX);//Firefox
+        if(this===window)//less than ie9
         {
             sender=event.srcElement;
         }
@@ -111,9 +111,6 @@
         else
             sender.style.cursor = 'default';
 
-
-
-
         //this col
         if(sender.IsMouseDown&&(sender.oldWidth + (event.x - sender.clickX))> 0)
         {
@@ -123,12 +120,8 @@
             sender.style.cursor = 'col-resize';
 
         }
-
-        //next
-        var previous=getPerviousElement(sender);
-        if(IsTableHeader(previous)&&previous.IsMouseDown&&(previous.oldWidth + (event.x - previous.clickX))> 0)
+        else if(IsTableHeader(previous)&&previous.IsMouseDown&&(previous.oldWidth + (event.x - previous.clickX))> 0)//next
         {
-           // console.log(event.offsetX);
             previous.width = previous.oldWidth + (event.x - previous.clickX);
             //rersize width
             previous.style.width = previous.width;
