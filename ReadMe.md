@@ -23,5 +23,5 @@
 
 ###兼容性
 
-* 现代浏览器（Chrome,Oprea）
-* IE6+
+* 现代浏览器（Chrome,Oprea,firefox）
+* IE9+
