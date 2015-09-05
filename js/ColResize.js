@@ -5,7 +5,7 @@
 (function(window,document){
 
     "use strict";
-    var IGNORE_TABLE_ATRR="data-col-resize";
+    var IGNORE_TABLE_ATRR="data-resize-col";
     var RESIZE_OFFSET=10;
 
     var RUN_DELAY=15;
@@ -21,7 +21,7 @@
             if(!t_start){
                 t_start = t_curr;
             }
-            if(t_curr - t_start >= mustRunDelay){  //当超过了必须执时的时间，
+            if(t_curr - t_start >= mustRunDelay){  //褰撹秴杩囦簡蹇呴』鎵ф椂鐨勬椂闂达紝
                 fn.apply(context, args);
                 t_start = t_curr;
             }
@@ -57,6 +57,22 @@
         return previous;
     }
 
+
+    function getTable(td)
+    {
+        var table=td&&td.parentElement.parentElement,
+            i=0;
+        while(table.nodeName!=="TABLE") {
+            table= table.parentElement;
+            if(i++>5)
+            {
+                throw "input error or html error";
+            }
+        }
+
+        return table;
+    }
+
     function getTableArray()
     {
         return document.getElementsByTagName("table");
@@ -67,6 +83,25 @@
         return ele&&(ele.nodeName==="TD"||ele.nodeName==="TH")
     }
 
+
+    function resizeWidth(target,event)
+    {
+        target.width = target.oldWidth + (event.x - target.clickX);
+        //rersize width
+        target.style.width = target.width;
+        adjustBindedTable(target);
+    }
+
+    function adjustBindedTable(target)
+    {
+        var table=  getTable(target),
+            col;
+        if(table.bindedTable)
+        {
+            col= table.bindedTable.rows[0].cells[target.cellIndex];
+            col.style.width=col.width=target.width;
+        }
+    }
 
     function mousedownListener(event)
     {
@@ -139,17 +174,13 @@
         //this col
         if(sender.IsMouseDown&&(sender.oldWidth + (event.x - sender.clickX))> 0)
         {
-            sender.width = sender.oldWidth + (event.x - sender.clickX);
-           //rersize width
-            sender.style.width = sender.width;
+            resizeWidth(sender,event);
             sender.style.cursor = 'col-resize';
 
         }
         else if(IsTableHeader(previous)&&previous.IsMouseDown&&(previous.oldWidth + (event.x - previous.clickX))> 0)//next
         {
-            previous.width = previous.oldWidth + (event.x - previous.clickX);
-            //rersize width
-            previous.style.width = previous.width;
+            resizeWidth(previous,event);
             sender.style.cursor = 'col-resize';
 
         }
@@ -185,16 +216,28 @@
         var tables=getTableArray(),
             i= 0,
             j= 0,
+            resizeAttr=null,
             currentCell=null;
         for(;i<tables.length;i++)
         {
-            if(tables[i].getAttribute(IGNORE_TABLE_ATRR)==="false") {
-            continue;
+            resizeAttr=tables[i].getAttribute(IGNORE_TABLE_ATRR);
+            if(resizeAttr==="false") {
+                continue;
+            }
+            else if(resizeAttr==="true")
+            {
+
+            }
+            else if(resizeAttr)
+            {
+                tables[i].bindedTable=document.getElementById(resizeAttr);
             }
             setTableStyle(tables[i]);
             addEvent(tables[i],"mouseup",mouseupOnTableListener);
             for(j=0;j<tables[i].rows[0].cells.length;j++)
             {
+
+
                 currentCell=tables[i].rows[0].cells[j];
                 addEvent(currentCell,"mousemove",throttle(mousemoveListener,RUN_DELAY,MUST_RUN_DELAY));
                 //addEvent(currentCell,"mousemove",mousemoveListener);
