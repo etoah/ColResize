@@ -2,70 +2,74 @@
  * Created by Lucien on 8/30/2015.
  */
 
-(function(window,document){
+(function (window, document) {
 
     "use strict";
-    var IGNORE_TABLE_ATRR="data-resize-col";
-    var RESIZE_OFFSET=10;
+    var IGNORE_TABLE_ATRR = "data-resize-col";
+    var RESIZE_OFFSET = 10;
 
-    var RUN_DELAY=15;
-    var MUST_RUN_DELAY=30;
+    var RUN_DELAY = 15;
+    var MUST_RUN_DELAY = 30;
 
 
-    var throttle = function(fn, delay, mustRunDelay){
+    var throttle = function (fn, delay, mustRunDelay) {
         var timer = null;
         var t_start;
-        return function(){
+        return function () {
             var context = this, args = arguments, t_curr = +new Date();
+
+            if (!context.addEventListener)//less than ie9
+            {
+                //args=deepCopy(arguments);
+            }
+
             clearTimeout(timer);
-            if(!t_start){
+            if (!t_start) {
                 t_start = t_curr;
             }
-            if(t_curr - t_start >= mustRunDelay){  //当超过了必须执时的时间，
+            if (t_curr - t_start >= mustRunDelay) {  //当超过了必须执时的时间，
                 fn.apply(context, args);
                 t_start = t_curr;
             }
             else {
-                timer = setTimeout(function(){
+                timer = setTimeout(function () {
                     fn.apply(context, args);
                 }, delay);
             }
         };
     };
 
-    function addEvent(element,event,callback)
-    {
-        if(element.addEventListener) //DOM 2
+    function addEvent(element, event, callback) {
+        if (element.addEventListener) //DOM 2
         {
-            element.addEventListener(event,callback);
+            element.addEventListener(event, callback);
 
         }
-        else if(element.attachEvent)//less than IE9
+        else if (element.attachEvent)//less than IE9
         {
-            element.attachEvent('on'+event,callback);
+            element.attachEvent('on' + event, callback);
         }
         else//dom 0
         {
-            element['on'+event]=callback;
+            element['on' + event] = callback;
         }
     }
 
-    function getPerviousElement(ele)
-    {
-        var previous=ele.previousSibling;
-        while ( previous && previous.nodeType !== 1 ){ previous=previous.previousSibling; }
+    function getPerviousElement(ele) {
+        var previous = ele.previousSibling;
+        while (previous && previous.nodeType !== 1) {
+            previous = previous.previousSibling;
+        }
         return previous;
     }
 
 
-    function getTable(td)
-    {
-        var table=td&&td.parentElement.parentElement,
-            i=0;
-        while(table.nodeName!=="TABLE") {
-            table= table.parentElement;
-            if(i++>5)
-            {
+    function getTable(td) {
+        var table = td && td.parentElement.parentElement,
+            i = 0;
+        while (table.nodeName !== "TABLE") {
+            table = table.parentElement;
+            if (i++ > 5) {
                 throw "input error or html error";
             }
         }
@@ -73,176 +77,155 @@
         return table;
     }
 
-    function getTableArray()
-    {
+    function getTableArray() {
         return document.getElementsByTagName("table");
     }
 
-    function IsTableHeader(ele)
-    {
-        return ele&&(ele.nodeName==="TD"||ele.nodeName==="TH")
+    function IsTableHeader(ele) {
+        return ele && (ele.nodeName === "TD" || ele.nodeName === "TH")
     }
 
 
-    function resizeWidth(target,event)
-    {
+    function resizeWidth(target, event) {
         target.width = target.oldWidth + (event.x - target.clickX);
         //rersize width
         target.style.width = target.width;
         adjustBindedTable(target);
     }
 
-    function adjustBindedTable(target)
-    {
-        var table=  getTable(target),
+    function adjustBindedTable(target) {
+        var table = getTable(target),
             col;
-        if(table.bindedTable)
-        {
-            col= table.bindedTable.rows[0].cells[target.cellIndex];
-            col.style.width=col.width=target.width;
+        if (table.bindedTable) {
+            col = table.bindedTable.rows[0].cells[target.cellIndex];
+            col.style.width = col.width = target.width;
         }
     }
 
-    function mousedownListener(event)
-    {
+    function mousedownListener(event) {
 
-        var sender=this,
-            previous=getPerviousElement(sender);
-        event.x||(event.x=event.pageX);//Firefox
-        if(this===window)//less than ie8
+        var sender = this,
+            previous = getPerviousElement(sender);
+        event.x || (event.x = event.pageX);//Firefox
+        if (this === window)//less than ie8
         {
-            sender=event.srcElement;
+            sender = event.srcElement;
         }
 
-        if (sender.offsetWidth-event.offsetX<=RESIZE_OFFSET)
-        {
+        if (sender.offsetWidth - event.offsetX <= RESIZE_OFFSET) {
             sender.IsMouseDown = true;
-            sender.clickX=event.x;
+            sender.clickX = event.x;
             sender.oldWidth = sender.offsetWidth;
         }
-        else if(event.offsetX<=RESIZE_OFFSET&&IsTableHeader(previous))//next col
+        else if (event.offsetX <= RESIZE_OFFSET && IsTableHeader(previous))//next col
         {
 
             previous.IsMouseDown = true;
-            previous.clickX=event.x;
+            previous.clickX = event.x;
             previous.oldWidth = previous.offsetWidth;
         }
 
     }
 
-    function mouseupListener(event)
-    {
+    function mouseupListener(event) {
 
-        var sender=this,
-            previous=getPerviousElement(sender);
-        if(this===window)//less than ie8
+        var sender = this,
+            previous = getPerviousElement(sender);
+        if (this === window)//less than ie8
         {
-            sender=event.srcElement;
+            sender = event.srcElement;
         }
         sender.style.cursor = 'default';
-        if (sender.offsetWidth-event.offsetX<=sender.offsetWidth/2)
-        {
+        if (sender.offsetWidth - event.offsetX <= sender.offsetWidth / 2) {
             sender.IsMouseDown = false;
         }
-        else if(event.offsetX<=sender.offsetWidth/2&&IsTableHeader(previous))//next col
+        else if (event.offsetX <= sender.offsetWidth / 2 && IsTableHeader(previous))//next col
         {
 
             previous.IsMouseDown = false;
         }
     }
 
-    function setTableStyle(table)
-    {
-        table.style.borderCollapse="collapse";
+    function setTableStyle(table) {
+        table.style.borderCollapse = "collapse";
     }
 
-    function mousemoveListener(event)
-    {
-        var sender=this,
-            previous=getPerviousElement(sender);
-        event.x||(event.x=event.pageX);//Firefox
-        if(this===window)//less than ie9
+    function mousemoveListener(event) {
+        var sender = this,
+            previous = getPerviousElement(sender);
+        event.x || (event.x = event.pageX);//Firefox
+        if (this === window)//less than ie9
         {
-            sender=event.srcElement;
+            sender = event.srcElement;
         }
 
-        if ((sender.offsetWidth-event.offsetX<=RESIZE_OFFSET)||(event.offsetX<=RESIZE_OFFSET)&&IsTableHeader(previous))//this or next col
+        if ((sender.offsetWidth - event.offsetX <= RESIZE_OFFSET) || (event.offsetX <= RESIZE_OFFSET) && IsTableHeader(previous))//this or next col
             sender.style.cursor = 'col-resize';
         else
             sender.style.cursor = 'default';
 
         //this col
-        if(sender.IsMouseDown&&(sender.oldWidth + (event.x - sender.clickX))> 0)
-        {
-            resizeWidth(sender,event);
+        if (sender.IsMouseDown && (sender.oldWidth + (event.x - sender.clickX)) > 0) {
+            resizeWidth(sender, event);
             sender.style.cursor = 'col-resize';
 
         }
-        else if(IsTableHeader(previous)&&previous.IsMouseDown&&(previous.oldWidth + (event.x - previous.clickX))> 0)//next
+        else if (IsTableHeader(previous) && previous.IsMouseDown && (previous.oldWidth + (event.x - previous.clickX)) > 0)//next
         {
-            resizeWidth(previous,event);
+            resizeWidth(previous, event);
             sender.style.cursor = 'col-resize';
 
         }
     }
 
 
-
-    function mouseupOnTableListener(event)
-    {
-        var sender=this,
-            j=0;
-        if(this===window)//less than ie9
+    function mouseupOnTableListener(event) {
+        var sender = this,
+            j = 0;
+        if (this === window)//less than ie9
         {
-            sender=event.srcElement;
+            sender = event.srcElement;
         }
 
-        if(sender.nodeName==="TABLE")//To prevent drag too fast or drag into the table, cancel all header drag
+        if (sender.nodeName === "TABLE")//To prevent drag too fast or drag into the table, cancel all header drag
         {
-            for(;j<sender.rows[0].cells.length;j++)
-            {
-                sender.rows[0].cells[j].IsMouseDown&&(sender.rows[0].cells[j].IsMouseDown=false);
+            for (; j < sender.rows[0].cells.length; j++) {
+                sender.rows[0].cells[j].IsMouseDown && (sender.rows[0].cells[j].IsMouseDown = false);
             }
 
 
         }
 
 
-
     }
 
-    function addColResizeEvent()
-    {
-        var tables=getTableArray(),
-            i= 0,
-            j= 0,
-            resizeAttr=null,
-            currentCell=null;
-        for(;i<tables.length;i++)
-        {
-            resizeAttr=tables[i].getAttribute(IGNORE_TABLE_ATRR);
-            if(resizeAttr==="false") {
+    function addColResizeEvent() {
+        var tables = getTableArray(),
+            i = 0,
+            j = 0,
+            resizeAttr = null,
+            currentCell = null;
+        for (; i < tables.length; i++) {
+            resizeAttr = tables[i].getAttribute(IGNORE_TABLE_ATRR);
+            if (resizeAttr === "false") {
                 continue;
             }
-            else if(resizeAttr==="true")
-            {
+            else if (resizeAttr === "true") {
 
             }
-            else if(resizeAttr)
-            {
-                tables[i].bindedTable=document.getElementById(resizeAttr);
+            else if (resizeAttr) {
+                tables[i].bindedTable = document.getElementById(resizeAttr);
             }
             setTableStyle(tables[i]);
-            addEvent(tables[i],"mouseup",mouseupOnTableListener);
-            for(j=0;j<tables[i].rows[0].cells.length;j++)
-            {
+            addEvent(tables[i], "mouseup", mouseupOnTableListener);
+            for (j = 0; j < tables[i].rows[0].cells.length; j++) {
 
 
-                currentCell=tables[i].rows[0].cells[j];
-                addEvent(currentCell,"mousemove",throttle(mousemoveListener,RUN_DELAY,MUST_RUN_DELAY));
-                //addEvent(currentCell,"mousemove",mousemoveListener);
-                addEvent(currentCell,"mousedown",mousedownListener);
-                addEvent(currentCell,"mouseup",mouseupListener);
+                currentCell = tables[i].rows[0].cells[j];
+               // addEvent(currentCell, "mousemove", throttle(mousemoveListener, RUN_DELAY, MUST_RUN_DELAY));
+                addEvent(currentCell,"mousemove",mousemoveListener);
+                addEvent(currentCell, "mousedown", mousedownListener);
+                addEvent(currentCell, "mouseup", mouseupListener);
 
 
             }
@@ -252,9 +235,7 @@
     }
 
 
-
-    addEvent(window,"load",addColResizeEvent);
-
+    addEvent(window, "load", addColResizeEvent);
 
 
-})(window,document);
+})(window, document);
