@@ -38,4 +38,4 @@
 
 ##兼容性
 * 现代浏览器（Chrome,Oprea,firefox）
-* IE9+
+* IE6+
