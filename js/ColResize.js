@@ -235,13 +235,18 @@
         }
     }
 
-    function setResizeRelate(originSelector,targetSelector)
+    function setResizeRelate(originSelector,targetSelector,isMutually)
     {
         var originElement=document.querySelector(originSelector);
         var targetElement=document.querySelector(targetSelector);
         if(originElement.nodeName&&originElement.nodeName==="TABLE"&&targetElement.nodeName&&targetElement.nodeName)
         {
             originElement['bindedTable']=targetElement;
+            isMutually=isMutually===undefined?true:isMutually;
+            if(isMutually)
+            {
+                targetElement['bindedTable']=originElement;
+            }
         }
     }
 
