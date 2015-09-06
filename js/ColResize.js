@@ -10,8 +10,7 @@
 
     var RUN_DELAY = 15;
     var MUST_RUN_DELAY = 30;
-
-
+    
     var throttle = function (fn, delay, mustRunDelay) {
         var timer = null;
         var t_start;
@@ -38,6 +37,8 @@
             }
         };
     };
+
+
 
     function addEvent(element, event, callback) {
         if (element.addEventListener) //DOM 2
@@ -234,8 +235,19 @@
         }
     }
 
+    function setResizeRelate(originSelector,targetSelector)
+    {
+        var originElement=document.querySelector(originSelector);
+        var targetElement=document.querySelector(targetSelector);
+        if(originElement.nodeName&&originElement.nodeName==="TABLE"&&targetElement.nodeName&&targetElement.nodeName)
+        {
+            originElement['bindedTable']=targetElement;
+        }
+    }
+
 
     addEvent(window, "load", addColResizeEvent);
 
+    window.setResizeRelate=setResizeRelate;
 
 })(window, document);
