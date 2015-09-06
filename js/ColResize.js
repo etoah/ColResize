@@ -10,7 +10,7 @@
 
     var RUN_DELAY = 15;
     var MUST_RUN_DELAY = 30;
-    
+
     var throttle = function (fn, delay, mustRunDelay) {
         var timer = null;
         var t_start;
@@ -215,7 +215,7 @@
 
             }
             else if (resizeAttr) {
-                tables[i].bindedTable = document.getElementById(resizeAttr);
+                tables[i].bindedTable = document.querySelector(resizeAttr);
             }
             setTableStyle(tables[i]);
             addEvent(tables[i], "mouseup", mouseupOnTableListener);
