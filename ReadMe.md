@@ -38,7 +38,12 @@
 ####设置联动关系
 在有些框架中，表的代码由后端（.net ,jsp,php）控件生成，不容易加data属性，可通过以下方式设置。
 ```js
-setResizeRelate("div.a>table","div.b>table")
+setResizeRelate("div.a>table","div.b>table");
+```
+setResizeRelate还有第三个属性，表示是否相互联动，默认为相互联动，若不需，请加fasle;
+
+```js
+setResizeRelate("div.a>table","div.b>table",false);
 ```
 
 ##兼容性
