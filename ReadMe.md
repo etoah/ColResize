@@ -43,4 +43,4 @@ setResizeRelate("div.a>table","div.b>table")
 
 ##兼容性
 * 现代浏览器（Chrome,Oprea,firefox）
-* IE6+
+* IE8+
