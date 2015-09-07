@@ -247,6 +247,10 @@
             {
                 targetElement['bindedTable']=originElement;
             }
+            else
+            {
+                targetElement.setAttribute(IGNORE_TABLE_ATRR,"false");
+            }
         }
     }
 
