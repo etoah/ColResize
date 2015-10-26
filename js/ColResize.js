@@ -2,6 +2,8 @@
  * Created by Lucien on 8/30/2015.
  */
 
+//ToDo:支持cmd
+
 (function (window, document) {
 
     "use strict";
@@ -219,7 +221,7 @@
             }
             setTableStyle(tables[i]);
             addEvent(tables[i], "mouseup", mouseupOnTableListener);
-            for (j = 0; j < tables[i].rows[0].cells.length; j++) {
+            for (j = 0; j < tables[i].rows[0].cells.length; j++) {//TODO:此处需优化，使用冒泡的方法捕捉事件
 
 
                 currentCell = tables[i].rows[0].cells[j];
