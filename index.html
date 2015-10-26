@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Colresize by etoah</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Colresize</h1>
+      <h2 class="project-tagline">动态调整列宽的js库</h2>
+      <a href="https://github.com/etoah/ColResize" class="btn">View on GitHub</a>
+      <a href="https://github.com/etoah/ColResize/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/etoah/ColResize/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="动态改变列宽" class="anchor" href="#%E5%8A%A8%E6%80%81%E6%94%B9%E5%8F%98%E5%88%97%E5%AE%BD" aria-hidden="true"><span class="octicon octicon-link"></span></a>动态改变列宽</h1>
+
+<h2>
+<a id="功能" class="anchor" href="#%E5%8A%9F%E8%83%BD" aria-hidden="true"><span class="octicon octicon-link"></span></a>功能</h2>
+
+<ol>
+<li>通过拖拽表头，动态的改变列宽。</li>
+<li>双表联动</li>
+</ol>
+
+<h2>
+<a id="如何使用" class="anchor" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>如何使用</h2>
+
+<h3>
+<a id="引用colresizejs" class="anchor" href="#%E5%BC%95%E7%94%A8colresizejs" aria-hidden="true"><span class="octicon octicon-link"></span></a>引用<code>ColResize.js</code>
+</h3>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>js/ColResize.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>或者把文件内容复制到自已的库当中,当页面加载完成后，脚本就会为table加载事件。</p>
+
+<p><strong>对无需动态改变列宽的表，只需添加<code>data-col-resize="false"</code> 属性即可：</strong></p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">table</span> <span class="pl-e">data-col-resize</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>&gt;
+</pre></div>
+
+<h3>
+<a id="双表联动" class="anchor" href="#%E5%8F%8C%E8%A1%A8%E8%81%94%E5%8A%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>双表联动</h3>
+
+<p>把<code>data-resize-col</code>即可。<br>
+  例：</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">table</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>ad<span class="pl-pds">"</span></span> <span class="pl-e">data-resize-col</span>=<span class="pl-s"><span class="pl-pds">"</span>#table2<span class="pl-pds">"</span></span>&gt;   </pre></div>
+
+<ul>
+<li>如果目标表不需单独改变列宽，请在目标表添加<code>data-resize-col="false"</code><br>
+如： </li>
+</ul>
+
+<div class="highlight highlight-text-html-basic"><pre> &lt;<span class="pl-ent">table</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>table2<span class="pl-pds">"</span></span> <span class="pl-e">data-resize-col</span>=<span class="pl-s"><span class="pl-pds">"</span>false<span class="pl-pds">"</span></span>&gt;</pre></div>
+
+<ul>
+<li>如果两个表需要相互联动，则只需把<code>data-resize-col</code>,改为对方的id即可。</li>
+</ul>
+
+<div class="highlight highlight-text-html-basic"><pre> &lt;<span class="pl-ent">table</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>#table2<span class="pl-pds">"</span></span> <span class="pl-e">data-resize-col</span>=<span class="pl-s"><span class="pl-pds">"</span>ad<span class="pl-pds">"</span></span>&gt;</pre></div>
+
+<h4>
+<a id="设置联动关系" class="anchor" href="#%E8%AE%BE%E7%BD%AE%E8%81%94%E5%8A%A8%E5%85%B3%E7%B3%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>设置联动关系</h4>
+
+<p>在有些框架中，表的代码由后端（.net ,jsp,php）控件生成，不容易加data属性，可通过以下方式设置。</p>
+
+<div class="highlight highlight-source-js"><pre>setResizeRelate(<span class="pl-s"><span class="pl-pds">"</span>div.a&gt;table<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>div.b&gt;table<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>setResizeRelate还有第三个属性，表示是否相互联动，默认为相互联动，若不需，请加fasle;</p>
+
+<div class="highlight highlight-source-js"><pre>setResizeRelate(<span class="pl-s"><span class="pl-pds">"</span>div.a&gt;table<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>div.b&gt;table<span class="pl-pds">"</span></span>,<span class="pl-c1">false</span>);</pre></div>
+
+<h2>
+<a id="兼容性" class="anchor" href="#%E5%85%BC%E5%AE%B9%E6%80%A7" aria-hidden="true"><span class="octicon octicon-link"></span></a>兼容性</h2>
+
+<ul>
+<li>现代浏览器（Chrome,Oprea,firefox）</li>
+<li>IE8+</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/etoah/ColResize">Colresize</a> is maintained by <a href="https://github.com/etoah">etoah</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
