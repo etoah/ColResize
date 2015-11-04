@@ -7,6 +7,17 @@
 (function (window, document) {
 
     "use strict";
+
+
+    function ColResize()
+    {
+        addEvent(window, "load", addColResizeEvent);
+
+    }
+
+    ColResize.prototype.setResizeRelate=setResizeRelate;
+
+
     var IGNORE_TABLE_ATRR = "data-resize-col";
     var RESIZE_OFFSET = 10;
 
@@ -257,8 +268,16 @@
     }
 
 
+    function ColResize()
+    {
+
+
+    }
+
+    ColResize.prototype.setResizeRelate=setResizeRelate;
+
     addEvent(window, "load", addColResizeEvent);
 
-    window.setResizeRelate=setResizeRelate;
+    window.ColResize=ColResize;
 
 })(window, document);
