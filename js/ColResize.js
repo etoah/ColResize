@@ -91,7 +91,12 @@
 
 
     function resizeWidth(target, event) {
-        target.width = target.oldWidth + (event.x - target.clickX);
+        var offset=event.x - target.clickX;
+        //console.log('offset:'+offset+",event.x:"+event.x+",target.clickX:"+target.clickX+",target.oldWidth:"+target.oldWidth);
+        if(offset>=0)offset+=RESIZE_OFFSET;//偏移更多的位置，使列边更近
+        else offset-=RESIZE_OFFSET;
+        target.width = target.oldWidth + offset;
+
         adjustBindedTable(target);
     }
 
@@ -141,12 +146,17 @@
         sender.style.cursor = 'default';
         if (sender.offsetWidth - event.offsetX <= sender.offsetWidth / 2) {
             sender.IsMouseDown = false;
+            event.stopPropagation();
+            return false;
         }
         else if (event.offsetX <= sender.offsetWidth / 2 && IsTableHeader(previous))//next col
         {
 
             previous.IsMouseDown = false;
+            event.stopPropagation();
+            return false;
         }
+
     }
 
     function setTableStyle(table) {
@@ -197,8 +207,6 @@
             for (; j < sender.rows[0].cells.length; j++) {
                 sender.rows[0].cells[j].IsMouseDown && (sender.rows[0].cells[j].IsMouseDown = false);
             }
-
-
         }
 
 
@@ -223,15 +231,14 @@
             }
             setTableStyle(tables[i]);
             addEvent(tables[i], "mouseup", mouseupOnTableListener);
-            for (j = 0; j < tables[i].rows[0].cells.length; j++) {//TODO:此处需优化，使用冒泡的方法捕捉事件
+            for (j = 0; j < tables[i].rows[0].cells.length; j++) {
 
 
                 currentCell = tables[i].rows[0].cells[j];
-               // addEvent(currentCell, "mousemove", throttle(mousemoveListener, RUN_DELAY, MUST_RUN_DELAY));
-                addEvent(currentCell,"mousemove",mousemoveListener);
+                addEvent(currentCell, "mousemove", throttle(mousemoveListener, RUN_DELAY, MUST_RUN_DELAY));
+                //addEvent(currentCell,"mousemove",mousemoveListener);
                 addEvent(currentCell, "mousedown", mousedownListener);
                 addEvent(currentCell, "mouseup", mouseupListener);
-
 
             }
 
