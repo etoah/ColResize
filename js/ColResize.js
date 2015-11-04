@@ -9,7 +9,7 @@
     "use strict";
 
     var IGNORE_TABLE_ATRR = "data-resize-col";
-    var RESIZE_OFFSET = 10;
+    var RESIZE_OFFSET = 5;
 
     var RUN_DELAY = 15;
     var MUST_RUN_DELAY = 30;
@@ -92,11 +92,10 @@
 
     function resizeWidth(target, event) {
         target.width = target.oldWidth + (event.x - target.clickX);
-        //rersize width
-        target.style.width = target.width;
         adjustBindedTable(target);
     }
 
+    //调整绑定表对应列的宽度
     function adjustBindedTable(target) {
         var table = getTable(target),
             col;
@@ -163,7 +162,8 @@
             sender = event.srcElement;
         }
 
-        if ((sender.offsetWidth - event.offsetX <= RESIZE_OFFSET) || (event.offsetX <= RESIZE_OFFSET) && IsTableHeader(previous))//this or next col
+        if ((sender.offsetWidth - event.offsetX <= RESIZE_OFFSET) || (event.offsetX <= RESIZE_OFFSET)
+            && IsTableHeader(previous))//this or next col
             sender.style.cursor = 'col-resize';
         else
             sender.style.cursor = 'default';
@@ -174,7 +174,8 @@
             sender.style.cursor = 'col-resize';
 
         }
-        else if (IsTableHeader(previous) && previous.IsMouseDown && (previous.oldWidth + (event.x - previous.clickX)) > 0)//next
+        else if (IsTableHeader(previous) && previous.IsMouseDown
+            && (previous.oldWidth + (event.x - previous.clickX)) > 0)//next
         {
             resizeWidth(previous, event);
             sender.style.cursor = 'col-resize';
