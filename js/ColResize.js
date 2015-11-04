@@ -8,16 +8,6 @@
 
     "use strict";
 
-
-    function ColResize()
-    {
-        addEvent(window, "load", addColResizeEvent);
-
-    }
-
-    ColResize.prototype.setResizeRelate=setResizeRelate;
-
-
     var IGNORE_TABLE_ATRR = "data-resize-col";
     var RESIZE_OFFSET = 10;
 

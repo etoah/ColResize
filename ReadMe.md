@@ -43,7 +43,7 @@ setResizeRelate("div.a>table","div.b>table");
 setResizeRelate还有第三个属性，表示是否相互联动，默认为相互联动，若不需，请加fasle;
 
 ```js
-setResizeRelate("div.a>table","div.b>table",false);
+new ColResize().setResizeRelate("div.a>table","div.b>table");
 ```
 
 ##兼容性
